@@ -161,6 +161,30 @@ class _ServiceManagementClient(object):
 
         return response
 
+    def perform_patch(self, path, body, x_ms_version=None):
+        '''
+        Performs a PATCH request and returns the response.
+
+        path:
+            Path to the resource.
+            Ex: '/<subscription-id>/services/hostedservices/<service-name>'
+        body:
+            Body for the PATCH request.
+        x_ms_version:
+            If specified, this is used for the x-ms-version header.
+            Otherwise, self.x_ms_version is used.
+        '''
+        request = HTTPRequest()
+        request.method = 'PATCH'
+        request.host = self.host
+        request.path = path
+        request.body = _get_request_body(body)
+        request.path, request.query = _update_request_uri_query(request)
+        request.headers = self._update_management_header(request, x_ms_version)
+        response = self._perform_request(request)
+
+        return response
+
     def perform_post(self, path, body, x_ms_version=None):
         '''
         Performs a POST request and returns the response.
@@ -329,6 +353,14 @@ class _ServiceManagementClient(object):
 
     def _perform_put(self, path, body, async=False, x_ms_version=None):
         response = self.perform_put(path, body, x_ms_version)
+
+        if async:
+            return parse_response_for_async_op(response)
+
+        return None
+
+    def _perform_patch(self, path, body, async=False, x_ms_version=None):
+        response = self.perform_patch(path, body, x_ms_version)
 
         if async:
             return parse_response_for_async_op(response)

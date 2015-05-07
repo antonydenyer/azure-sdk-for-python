@@ -279,6 +279,30 @@ class SchedulerManagementService(_ServiceManagementClient):
         payload = self._perform_get(path).body.decode()
         return json.loads(payload)
 
+    def update_job(self, cloud_service_id, job_collection_id, job_id, job):
+        '''
+        The Update Job request updates an existing job.
+
+        cloud_service_id:
+            The cloud service id
+        job_collection_id:
+            Name of the hosted service.
+        job_id:
+            The job id you wish to update.
+        job:
+            A dictionary of the payload
+        '''
+        _validate_not_none('cloud_service_id', cloud_service_id)
+        _validate_not_none('job_collection_id', job_collection_id)
+        _validate_not_none('job_id', job_id)
+
+        path = self._get_job_collection_path(
+            cloud_service_id, job_collection_id, job_id)
+
+        self.content_type = "application/json"
+        payload = self._perform_patch(path, _JSONEncoder().encode(job), async=True).body.decode()
+        return json.loads(payload)
+
     def get_all_jobs(self, cloud_service_id, job_collection_id):
         '''
         The Get All Jobs operation gets all the jobs in a job collection.

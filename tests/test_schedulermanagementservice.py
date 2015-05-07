@@ -220,6 +220,7 @@ class SchedulerManagementServiceTest(AzureTestCase):
         self.assertIsNotNone(result)
 
     def test_get_job(self):
+        # Arrange
         self._create_cloud_service()
         self._create_job_collection()
         self._create_job()
@@ -230,6 +231,21 @@ class SchedulerManagementServiceTest(AzureTestCase):
         # Assert
         self.assertIsNotNone(result)
         self.assertEqual(result["state"], "enabled")
+
+    def test_update_job(self):
+        # Arrange
+        self._create_cloud_service()
+        self._create_job_collection()
+        self._create_job()
+        job = {
+            "state": "disabled"
+        }
+        # Act
+        result = self.ss.update_job(self.service_id, self.coll_id, self.job_id, job)
+
+        # Assert
+        self.assertIsNotNone(result)
+        self.assertEqual(result["state"], "disabled")
 
     def test_get_all_jobs(self):
         self._create_cloud_service()
