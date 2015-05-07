@@ -1872,12 +1872,12 @@ class CloudService(WindowsAzureData):
         self.resources = Resources()
 
 
-class JSONEncoder(json.JSONEncoder):
+class _JSONEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
             return obj.isoformat()
         else:
-            return super(JSONEncoder, self).default(obj)
+            return super(_JSONEncoder, self).default(obj)
 
 
 class Resources(WindowsAzureData):

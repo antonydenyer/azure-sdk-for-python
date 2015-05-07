@@ -26,7 +26,7 @@ from azure.servicemanagement import (
     CloudService,
     CloudServices,
     AvailabilityResponse,
-    JSONEncoder
+    _JSONEncoder
 )
 from azure.servicemanagement.servicemanagementclient import (
     _ServiceManagementClient,
@@ -234,7 +234,7 @@ class SchedulerManagementService(_ServiceManagementClient):
             cloud_service_id, job_collection_id, job_id)
 
         self.content_type = "application/json"
-        return self._perform_put(path, JSONEncoder().encode(job), async=True)
+        return self._perform_put(path, _JSONEncoder().encode(job), async=True)
 
     def delete_job(self, cloud_service_id, job_collection_id, job_id):
         '''
